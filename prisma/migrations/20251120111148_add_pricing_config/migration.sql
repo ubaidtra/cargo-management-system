@@ -1,0 +1,6 @@
+-- CreateTable
+CREATE TABLE "PricingConfig" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "baseCost" REAL NOT NULL DEFAULT 10.0,
+    "costPerKg" REAL NOT NULL DEFAULT 5.0
+);
