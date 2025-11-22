@@ -3,37 +3,37 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
   username String @unique
   password String // Simple text for MVP
   role     String // ADMIN or OPERATOR
 }
 
 model Cargo {
-  id             Int      @id @default(autoincrement())
-  trackingNumber String   @unique
-  senderName     String
-  senderContact  String?
-  receiverName   String
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  trackingNumber  String   @unique
+  senderName      String
+  senderContact   String?
+  receiverName    String
   receiverContact String?
-  destination    String
-  weight         Float
-  numberOfItems  Int      @default(1)
-  description    String?
-  cost           Float
-  status         String   // SENT, RECEIVED
-  paymentStatus  String   // PAID, UNPAID
-  sendingDate    DateTime @default(now())
-  createdAt      DateTime @default(now())
+  destination     String
+  weight          Float
+  numberOfItems   Int      @default(1)
+  description     String?
+  cost            Float
+  status          String   // SENT, RECEIVED
+  paymentStatus   String   // PAID, UNPAID
+  sendingDate     DateTime @default(now())
+  createdAt       DateTime @default(now())
 }
 
 model PricingConfig {
-  id        Int   @id @default(autoincrement())
-  baseCost  Float @default(10.0)
-  costPerKg Float @default(5.0)
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  baseCost  Float  @default(10.0)
+  costPerKg Float  @default(5.0)
 }

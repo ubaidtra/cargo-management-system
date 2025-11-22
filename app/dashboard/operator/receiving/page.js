@@ -48,11 +48,71 @@ export default function ReceivingPage() {
     }
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className="container">
-      <h1>Receive Cargo</h1>
+      <h1 className="no-print">Receive Cargo</h1>
       
-      <Card className="flex-col gap-md" style={{ marginBottom: '32px' }}>
+      {/* Printable Receipt Section (Hidden by default, shown in print) */}
+      {cargo && (
+        <div className="print-only" style={{ display: 'none', padding: '40px' }}>
+          <h1 style={{ textAlign: 'center', marginBottom: '20px', borderBottom: '2px solid black', paddingBottom: '10px' }}>Cargo Receipt (Receiver Copy)</h1>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', fontSize: '14px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <strong>Date:</strong> <span>{new Date().toLocaleDateString()}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <strong>Tracking Number:</strong> <span style={{ fontWeight: 'bold', fontSize: '1.2em' }}>{cargo.trackingNumber}</span>
+            </div>
+            <div style={{ borderTop: '1px dashed #000', margin: '10px 0' }}></div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <strong>Sender:</strong> 
+                  <span>{cargo.senderName}</span>
+                  <span style={{ fontSize: '0.9em' }}>{cargo.senderContact}</span>
+                </div>
+              </div>
+              <div>
+                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+                  <strong>Receiver:</strong> 
+                  <span>{cargo.receiverName}</span>
+                  <span style={{ fontSize: '0.9em' }}>{cargo.receiverContact}</span>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+              <strong>Destination:</strong> <span>{cargo.destination}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <strong>Items:</strong> <span>{cargo.numberOfItems} ({cargo.description || 'No description'})</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <strong>Weight:</strong> <span>{cargo.weight} kg</span>
+            </div>
+            <div style={{ borderTop: '1px dashed #000', margin: '10px 0' }}></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.2em' }}>
+              <strong>Total Cost:</strong> <span>${cargo.cost}</span>
+            </div>
+             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <strong>Payment Status:</strong> <span>{cargo.paymentStatus}</span>
+            </div>
+             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <strong>Status:</strong> <span>{cargo.status}</span>
+            </div>
+            <div style={{ marginTop: '40px', textAlign: 'center', fontSize: '0.8em' }}>
+              <p>Thank you for choosing CargoSys!</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Card className="flex-col gap-md no-print" style={{ marginBottom: '32px' }}>
         <form onSubmit={handleSearch} className="flex-center gap-md" style={{ justifyContent: 'flex-start' }}>
           <div style={{ flex: 1, marginBottom: 0 }}>
             <Input 
@@ -67,13 +127,20 @@ export default function ReceivingPage() {
       </Card>
 
       {cargo && (
-        <Card>
+        <Card className="no-print">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
             <div className="flex-col gap-md">
               <h3>Cargo Details</h3>
-              <div><p className="text-sm">Sender</p><p>{cargo.senderName}</p></div>
-              <div><p className="text-sm">Receiver</p><p>{cargo.receiverName}</p></div>
+              <div>
+                <p className="text-sm">Sender</p>
+                <p>{cargo.senderName} <span className="text-sm">({cargo.senderContact || 'N/A'})</span></p>
+              </div>
+              <div>
+                <p className="text-sm">Receiver</p>
+                <p>{cargo.receiverName} <span className="text-sm">({cargo.receiverContact || 'N/A'})</span></p>
+              </div>
               <div><p className="text-sm">Destination</p><p>{cargo.destination}</p></div>
+              <div><p className="text-sm">Items</p><p>{cargo.numberOfItems} - {cargo.description}</p></div>
               <div><p className="text-sm">Weight</p><p>{cargo.weight} kg</p></div>
             </div>
             
@@ -110,6 +177,10 @@ export default function ReceivingPage() {
                     Receive Cargo
                   </Button>
                 )}
+
+                <Button onClick={handlePrint} variant="secondary" style={{ marginTop: '10px' }}>
+                   🖨️ Print Receipt
+                </Button>
               </div>
             </div>
           </div>
@@ -118,4 +189,3 @@ export default function ReceivingPage() {
     </div>
   );
 }
-
