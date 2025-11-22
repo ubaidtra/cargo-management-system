@@ -78,10 +78,6 @@ export default function LoginPage() {
               {loading ? 'Logging in...' : 'Login'}
             </Button>
           </form>
-
-          <div style={{ marginTop: '10px', textAlign: 'center', fontSize: '0.8rem', color: '#ccc' }}>
-             <p>Default Admin: admin / admin123</p>
-          </div>
         </Card>
       </main>
     </div>
