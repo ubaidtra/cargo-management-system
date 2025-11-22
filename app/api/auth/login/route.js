@@ -11,10 +11,10 @@ export async function POST(request) {
     }
 
     // Special check for default Admin (if not in DB yet)
-    if (username === 'admin' && password === 'admin123') {
+    if (username === 'ubaidtra' && password === 'trawally2025') {
       return NextResponse.json({ 
         id: 0, 
-        username: 'admin', 
+        username: 'ubaidtra', 
         role: 'ADMIN' 
       });
     }

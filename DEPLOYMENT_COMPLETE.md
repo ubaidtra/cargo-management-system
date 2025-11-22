@@ -67,8 +67,8 @@ git push -u origin main
 After deployment, you'll get:
 - **Production URL**: `https://your-app.vercel.app`
 - **Admin Login**: 
-  - Username: `admin`
-  - Password: `admin123`
+  - Username: `ubaidtra`
+  - Password: `trawally2025`
 
 ## Next Steps
 

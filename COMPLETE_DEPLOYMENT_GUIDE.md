@@ -55,7 +55,7 @@ git remote remove origin
 Replace `YOUR_USERNAME` and `REPOSITORY_NAME` with your actual values:
 
 ```bash
-git remote add origin https://github.com/YOUR_USERNAME/REPOSITORY_NAME.git
+git remote add origin https://github.com/ubaidtra/cargo management system.git
 ```
 
 **Example:**
@@ -168,8 +168,8 @@ git push -u origin main
 1. Open your live URL
 2. You should see your Cargo Management System homepage
 3. Try logging in with:
-   - **Username**: `admin`
-   - **Password**: `admin123`
+   - **Username**: `ubaidtra`
+   - **Password**: `trawally2025`
 
 ---
 
