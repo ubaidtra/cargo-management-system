@@ -10,6 +10,11 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Username and password are required' }, { status: 400 });
     }
 
+    // Block old admin credentials
+    if (username === 'admin' && password === 'admin123') {
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
+
     // Special check for default Admin (if not in DB yet)
     if (username === 'ubaidtra' && password === 'trawally2025') {
       return NextResponse.json({ 
