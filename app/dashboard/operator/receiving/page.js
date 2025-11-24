@@ -32,10 +32,19 @@ export default function ReceivingPage() {
   const handleAction = async (action) => {
     if (!cargo) return;
     try {
+      // Get operator info from localStorage
+      const operatorId = localStorage.getItem('userId');
+      const operatorUsername = localStorage.getItem('username');
+      
       const res = await fetch('/api/cargo/receive', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ trackingNumber: cargo.trackingNumber, action })
+        body: JSON.stringify({ 
+          trackingNumber: cargo.trackingNumber, 
+          action,
+          operatorId,
+          operatorUsername
+        })
       });
       const data = await res.json();
       if (res.ok) {

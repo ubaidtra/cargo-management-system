@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Card from '@/components/Card';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
@@ -30,15 +30,50 @@ export default function SendingPage() {
   });
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [pricing, setPricing] = useState({ baseCost: 10, costPerKg: 5 });
+  const [calculatedCost, setCalculatedCost] = useState(null);
+
+  // Fetch pricing configuration
+  useEffect(() => {
+    fetch('/api/admin/pricing')
+      .then(res => res.json())
+      .then(data => {
+        if (data.baseCost !== undefined && data.costPerKg !== undefined) {
+          setPricing({ baseCost: data.baseCost, costPerKg: data.costPerKg });
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching pricing:', err);
+      });
+  }, []);
+
+  // Calculate cost when weight changes
+  useEffect(() => {
+    if (form.weight && parseFloat(form.weight) > 0) {
+      const weight = parseFloat(form.weight);
+      const cost = pricing.baseCost + (weight * pricing.costPerKg);
+      setCalculatedCost(cost.toFixed(2));
+    } else {
+      setCalculatedCost(null);
+    }
+  }, [form.weight, pricing]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      // Get operator info from localStorage
+      const operatorId = localStorage.getItem('userId');
+      const operatorUsername = localStorage.getItem('username');
+      
       const res = await fetch('/api/cargo/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
+        body: JSON.stringify({
+          ...form,
+          operatorId,
+          operatorUsername
+        })
       });
       const data = await res.json();
       setResult(data);
@@ -125,7 +160,7 @@ export default function SendingPage() {
         </div>
       )}
 
-      <div className="no-print" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+      <div className="no-print responsive-grid">
         <Card>
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -225,6 +260,27 @@ export default function SendingPage() {
                 </select>
               </div>
             </div>
+
+            {/* Display Calculated Cost */}
+            {calculatedCost && (
+              <div style={{
+                padding: '12px 16px',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                border: '1px solid rgba(16, 185, 129, 0.3)',
+                borderRadius: '8px',
+                marginBottom: '16px'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)' }}>Calculated Cost:</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#10b981' }}>
+                    ${calculatedCost}
+                  </span>
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>
+                  Base: ${pricing.baseCost} + Weight ({form.weight} kg × ${pricing.costPerKg}/kg)
+                </div>
+              </div>
+            )}
 
             <Button type="submit" disabled={loading}>
               {loading ? 'Processing...' : 'Register Cargo'}

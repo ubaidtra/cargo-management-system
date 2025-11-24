@@ -26,7 +26,7 @@ export default function AdminDashboard() {
     <div className="container">
       <h1>Admin Dashboard</h1>
       
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px', marginBottom: '32px' }}>
+      <div className="responsive-grid" style={{ marginBottom: '32px' }}>
         <Card>
           <p className="text-sm">Total Cargo</p>
           <h2 style={{ fontSize: '2rem', color: '#4e54c8' }}>{stats.totalCargo}</h2>
@@ -39,7 +39,7 @@ export default function AdminDashboard() {
 
       <h2>Recent Transactions</h2>
       <Card>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="table-wrapper" style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
             <thead>
               <tr style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>

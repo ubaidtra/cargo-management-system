@@ -8,10 +8,26 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  username String @unique
-  password String // Simple text for MVP
-  role     String // ADMIN or OPERATOR
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  username String  @unique
+  password String  // Simple text for MVP
+  role     String  // ADMIN or OPERATOR
+  isActive Boolean @default(true)
+  // Operator Profile Fields
+  country  String?
+  branch   String?
+  email    String?
+  address  String?
+  contact  String?
+}
+
+model ActivityLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  action    String   // CREATE_USER, DELETE_USER, ACTIVATE_USER, DEACTIVATE_USER, RESET_PASSWORD, LOGIN, CREATE_CARGO, etc.
+  userId    String?  // User who performed the action
+  username  String?  // Username for reference
+  details   String?  // Additional details about the action
+  timestamp DateTime @default(now())
 }
 
 model Cargo {

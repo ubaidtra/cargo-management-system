@@ -29,6 +29,8 @@ export default function LoginPage() {
       if (res.ok) {
         localStorage.setItem('userRole', data.role);
         localStorage.setItem('username', data.username);
+        localStorage.setItem('userId', data.id?.toString() || '0');
+        localStorage.setItem('isSuperAdmin', (data.isSuperAdmin || data.username === 'ubaidtra') ? 'true' : 'false');
         
         if (data.role === 'ADMIN') {
           router.push('/dashboard/admin');

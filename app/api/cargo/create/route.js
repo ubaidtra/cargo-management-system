@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { logActivity } from '@/lib/logger';
 
 export async function POST(request) {
   try {
@@ -8,7 +9,8 @@ export async function POST(request) {
       senderName, senderContact,
       receiverName, receiverContact,
       destination, weight, sendingDate, paymentStatus,
-      numberOfItems, description
+      numberOfItems, description,
+      operatorId, operatorUsername
     } = body;
 
     // Fetch Pricing Configuration
@@ -41,6 +43,33 @@ export async function POST(request) {
         sendingDate: sendingDate ? new Date(sendingDate) : new Date(),
       },
     });
+
+    // Log detailed transaction
+    try {
+      const transactionDetails = {
+        trackingNumber: cargo.trackingNumber,
+        senderName: cargo.senderName,
+        senderContact: cargo.senderContact || 'N/A',
+        receiverName: cargo.receiverName,
+        receiverContact: cargo.receiverContact || 'N/A',
+        destination: cargo.destination,
+        weight: cargo.weight,
+        numberOfItems: cargo.numberOfItems,
+        description: cargo.description || 'N/A',
+        cost: cargo.cost,
+        paymentStatus: cargo.paymentStatus,
+        sendingDate: cargo.sendingDate.toISOString()
+      };
+      
+      await logActivity(
+        'CREATE_CARGO',
+        operatorId || null,
+        operatorUsername || 'Unknown',
+        JSON.stringify(transactionDetails)
+      );
+    } catch (logError) {
+      console.warn('Failed to log cargo creation:', logError.message);
+    }
 
     return NextResponse.json(cargo);
   } catch (error) {
